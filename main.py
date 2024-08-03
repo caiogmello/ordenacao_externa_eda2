@@ -1,16 +1,10 @@
 from fileManager import fileManager
 from Registro import Registro
-import queue
-from Heap import Heap
+from ordenador import ordenador
 
 if __name__ == "__main__":
-    heap = Heap(3)
-    heap.push(Registro(5))
-    new_registro = Registro(2)
-    new_registro.setFlag()
-    heap.push(new_registro)
-    heap.push(Registro(10))
+    ordenador = ordenador()
+    
+    mode, specs, values = fileManager.read('example1')
 
-    while len (heap) > 0: 
-        print(heap.first().value)
-        heap.pop()
+    print(ordenador.gerarSequencais(specs[0], values))
