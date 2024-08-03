@@ -11,7 +11,10 @@ class Heap:
         return heappop(self.heap)
     
     def first(self):
-        return self.heap[0]
+        try:
+            return self.heap[0]
+        except:
+            return None
     
     def __len__(self):
         return len(self.heap)
