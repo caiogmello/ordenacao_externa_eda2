@@ -1,8 +1,10 @@
 from heapq import *
+from Registro import Registro
 
 class Heap:
     def __init__(self, memory: int):
-        self.heap = []
+        self.heap: list[Registro] = []
+        self.memory: int = memory
     
     def push(self, item):
         heappush(self.heap, item)
@@ -24,3 +26,15 @@ class Heap:
     
     def __str__(self):
         return str(self.heap)  
+    
+    def unflagAll(self):
+        for r in self.heap:
+            r.delFlag()
+
+    def flagAll(self):
+        for r in self.heap:
+            r.setFlag()
+
+    def isFullFlagged(self):
+        return len(self.heap) == self.memory and self.first().flag == 1
+        
