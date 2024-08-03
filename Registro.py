@@ -15,3 +15,9 @@ class Registro:
         if (self.flag != other.flag):
             return self.flag < other.flag
         return self.value < other.value
+    
+    def __str__(self):
+        return "Valor:"
+    
+    def __repr__(self): # or __str__
+        return str(self.value)
