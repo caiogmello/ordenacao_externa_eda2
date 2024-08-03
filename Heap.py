@@ -17,6 +17,9 @@ class Heap:
         except:
             return None
     
+    def isEmpty(self):
+        return (len(self.heap) < 1) 
+    
     def __len__(self):
         return len(self.heap)
     
