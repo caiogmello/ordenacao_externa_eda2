@@ -1,14 +1,14 @@
 from fileManager import fileManager
-from value import value
+from Registro import Registro
 import queue
+from heapq import *
 
 if __name__ == "__main__":
-    q = queue.PriorityQueue()
-    q.put(value(5,0))
-    q.put(value(2,1))
-    q.put(value(10,1))
+    heap = []
+    heappush(heap, Registro(5,0))
+    heappush(heap, Registro(2,1))
+    heappush(heap, Registro(10,1))
 
-
-    for i in range(3):
-        print(q.get().value)
-    
+    while len (heap) > 0: 
+        print(heap[0].value)
+        heappop(heap)
