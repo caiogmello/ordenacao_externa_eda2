@@ -1,9 +1,15 @@
 
 
 class Registro:
-    def __init__(self, value: int, flag: int = None):
+    def __init__(self, value: int):
         self.value = value
-        self.flag = 1 if flag is not None else 0
+        self.flag = 0
+
+    def setFlag(self):
+        self.flag = 1
+
+    def delFlag(self):
+        self.flag = 0
     
     def __lt__(self, other: 'Registro') -> bool:
         if (self.flag != other.flag):
