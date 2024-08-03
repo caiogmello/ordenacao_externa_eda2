@@ -1,6 +1,7 @@
 class pagina:
     def __init__(self):
         self.registros = []
+        self.blocked = False
 
     def get(self, index:int) -> int:
         if (self.registros[index] is not None):
