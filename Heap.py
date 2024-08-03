@@ -25,3 +25,15 @@ class Heap:
     
     def __str__(self):
         return str(self.heap)  
+    
+    def unflagAll(self):
+        for r in self.heap:
+            r.delFlag()
+
+    def flagAll(self):
+        for r in self.heap:
+            r.setFlag()
+
+    def isFullFlagged(self):
+        return len(self.heap) == self.memory and self.first().flag == 1
+        
