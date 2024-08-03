@@ -1,8 +1,9 @@
 from heapq import *
+from Registro import Registro
 
 class Heap:
     def __init__(self, memory: int):
-        self.heap = []
+        self.heap:list[Registro] = []
     
     def push(self, item):
         heappush(self.heap, item)
