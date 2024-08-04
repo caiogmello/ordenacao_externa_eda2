@@ -6,31 +6,32 @@ from Registro import Registro
 class ordenador:
     def __init__(self):
         self.paginas:deque[pagina] = deque()
+        self.nRegistros = 0
 
-    def isOrdered(self):
-        count = 0
-        for pagina in self.paginas:
-            if (not pagina.isEmpty()): count+=1
-        
-        if count == 1: return True
-        return False
-
-   
     def ordenar(self, method:str, m:int, k:int, r:int, n:int, registros:list[int]):
         self.criarPaginas(k)
         if (method == "B"): limitePaginas = k//2
         else: limitePaginas = k-1
-        self.gerarSequencais(m, registros, limitePaginas)
-        self.balanceada_multi_caminhos(n, m)
+        self.gerarSequencais(registros, m, r, limitePaginas)
+        match method:
+            case "B":
+                self.balanceada_multi_caminhos(m)
+            case "P":
+                pass
+            case "C":
+                pass
+            case _:
+                self.balanceada_multi_caminhos(m)
 
     def criarPaginas(self, k:int):
         for i in range(k):
             self.paginas.append(pagina(i))
     
-    def gerarSequencais(self, m:int, registros:list[int], limitePaginas:int) -> list[list:Registro]:
+    def gerarSequencais(self, registros:list[int], m:int, r:int, limitePaginas:int):
         heap = Heap()
         sequence:deque[Registro] = deque()
         pageCounter = 0
+        sequenceCounter = 0
         for elem in registros:
             new_registro = Registro(elem)
 
@@ -50,6 +51,9 @@ class ordenador:
 
             if (not heap.isEmpty() and heap.first().flag == 1):
                 self.paginas[pageCounter].add(sequence, pageCounter)
+                self.nRegistros+= len(sequence)
+                sequenceCounter+=1
+                if(sequenceCounter == r):return
                 pageCounter+=1
                 if (pageCounter == limitePaginas): pageCounter = 0
                 sequence = deque()
@@ -57,15 +61,16 @@ class ordenador:
         while(not heap.isEmpty()):
             sequence.append(heap.pop())
         
+        self.nRegistros+= len(sequence)
         self.paginas[pageCounter].add(sequence, pageCounter)
 
-    def balanceada_multi_caminhos(self, n:int, m:int):
+    def balanceada_multi_caminhos(self, m:int):
         count = 0
         while(not self.isOrdered()):
-            
             filled = [x for x in self.paginas if (not x.isEmpty())]
             notFilled = [x for x in self.paginas if (x.isEmpty())]
-            self.calcular_resultados(filled, count, n, m)
+
+            self.calcular_resultados(filled, count, m)
 
             for x in notFilled:
                 if (self.isOrdered()) : break;
@@ -76,7 +81,7 @@ class ordenador:
 
         
         filled = [x for x in self.paginas if (not x.isEmpty())]
-        self.calcular_resultados(filled, count, n, m)
+        self.calcular_resultados(filled, count, m)
             
         
     def intercalar(self, filled:deque[pagina], target:pagina):
@@ -88,7 +93,7 @@ class ordenador:
         
         new_sequence = deque()  #new_sequence representa a nova sequência que será gerada
 
-        #intercalação propriamente dita utilizando o HEAP MIN
+        #intercalação propriamente dita utilizando heap mim
         while(len(heap) > 0):
             item = heap.pop()
             if (not self.paginas[item.index].isBlocked()):
@@ -97,13 +102,22 @@ class ordenador:
     
         target.add(new_sequence, target.index)
 
+    #verifica se a ordenação finalizou
+    def isOrdered(self):
+        count = 0
+        for pagina in self.paginas:
+            if (not pagina.isEmpty()): count+=1
+        
+        if count == 1: return True
+        return False
+
     #So organiza o print e calcula os resultados
-    def calcular_resultados(self, filled:list[Registro], count:int, n:int, m:int):
+    def calcular_resultados(self, filled:list[Registro], count:int, m:int):
         print("Fase", count, end=" ")
         sequencesCount = 0
         for x in filled:
             sequencesCount+= x.getSequencesCount()
-        b = (1/(m*sequencesCount))*n
+        b = (1/(m*sequencesCount))*self.nRegistros
 
         print(round(b, 2))
         for x in filled:
