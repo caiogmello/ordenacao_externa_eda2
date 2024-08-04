@@ -62,19 +62,10 @@ class ordenador:
     def balanceada_multi_caminhos(self, n:int, m:int):
         count = 0
         while(not self.isOrdered()):
-            print("Fase", count, end=" ")
+            
             filled = [x for x in self.paginas if (not x.isEmpty())]
             notFilled = [x for x in self.paginas if (x.isEmpty())]
-            sequencesCount = 0
-            for x in filled:
-                sequencesCount+= x.getSequencesCount()
-            b = (1/(m*sequencesCount))*n
-
-            print(round(b, 2))
-            for x in filled:
-                print(x.index, ": ", sep="", end="")
-                x.imprimir()
-                print()
+            self.calcular_resultados(filled, count, n, m)
 
             for x in notFilled:
                 if (self.isOrdered()) : break;
@@ -83,9 +74,32 @@ class ordenador:
             
             count+=1
 
-        print("Fase", count, end=" ")
         
         filled = [x for x in self.paginas if (not x.isEmpty())]
+        self.calcular_resultados(filled, count, n, m)
+            
+        
+    def intercalar(self, filled:deque[pagina], target:pagina):
+        heap = Heap()
+        for x in filled:
+            if(x.isEmpty()):  #se a pagina está vazia eu simplesmente skipo ela
+                pass
+            else: heap.push(x.pop())
+        
+        new_sequence = deque()  #new_sequence representa a nova sequência que será gerada
+
+        #intercalação propriamente dita utilizando o HEAP MIN
+        while(len(heap) > 0):
+            item = heap.pop()
+            if (not self.paginas[item.index].isBlocked()):
+                heap.push(self.paginas[item.index].pop())
+            new_sequence.append(item)
+    
+        target.add(new_sequence, target.index)
+
+    #So organiza o print e calcula os resultados
+    def calcular_resultados(self, filled:list[Registro], count:int, n:int, m:int):
+        print("Fase", count, end=" ")
         sequencesCount = 0
         for x in filled:
             sequencesCount+= x.getSequencesCount()
@@ -93,26 +107,9 @@ class ordenador:
 
         print(round(b, 2))
         for x in filled:
-                print(x.index, ": ", sep="", end="")
-                x.imprimir()
-                print()
-            
-        
-    def intercalar(self, filled:deque[pagina], target:pagina):
-        heap = Heap()
-
-        for x in filled:
-            if(x.isEmpty()):
-                pass
-            else: heap.push(x.pop())
-        sequence = deque()
-        while(len(heap) > 0):
-            item = heap.pop()
-            if (not self.paginas[item.index].isBlocked()):
-                heap.push(self.paginas[item.index].pop())
-            sequence.append(item)
-    
-        target.add(sequence, target.index)
+            print(x.index, ": ", sep="", end="")
+            x.imprimir()
+            print()
 
 
 
