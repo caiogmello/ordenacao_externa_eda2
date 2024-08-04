@@ -66,6 +66,7 @@ class ordenador:
 
     def balanceada_multi_caminhos(self, m:int):
         count = 0
+        writes = 0.0
         while(not self.isOrdered()):
             filled = [x for x in self.paginas if (not x.isEmpty())]
             notFilled = [x for x in self.paginas if (x.isEmpty())]
@@ -74,7 +75,7 @@ class ordenador:
 
             for x in notFilled:
                 if (self.isOrdered()) : break;
-                self.intercalar(filled, x)
+                writes += self.intercalar(filled, x)
                 [x.active() for x in filled if x.isBlocked()]
             
             count+=1
@@ -82,9 +83,11 @@ class ordenador:
         
         filled = [x for x in self.paginas if (not x.isEmpty())]
         self.calcular_resultados(filled, count, m)
+        print("Final", f"{writes/self.nRegistros:.2f}")
             
         
-    def intercalar(self, filled:deque[pagina], target:pagina):
+    def intercalar(self, filled:deque[pagina], target:pagina) -> float:
+        nWrites = 0.0
         heap = Heap()
         for x in filled:
             if(x.isEmpty()):  #se a pagina está vazia eu simplesmente skipo ela
@@ -99,11 +102,14 @@ class ordenador:
             if (not self.paginas[item.index].isBlocked()):
                 heap.push(self.paginas[item.index].pop())
             new_sequence.append(item)
+            nWrites += 1
     
         target.add(new_sequence, target.index)
+        return nWrites
 
     def polifasica(self, m):
         count = 0
+        writes = 0.0
         while(not self.isOrdered()):
             filled = [x for x in self.paginas if (not x.isEmpty())]
             notFilled = [x for x in self.paginas if (x.isEmpty())]
@@ -111,7 +117,7 @@ class ordenador:
             self.calcular_resultados(filled, count, m)
 
             
-            self.intercalar_polifasica(filled, notFilled[0])
+            writes += self.intercalar_polifasica(filled, notFilled[0])
             [x.active() for x in filled if x.isBlocked()]
             
             count+=1
@@ -119,8 +125,10 @@ class ordenador:
         
         filled = [x for x in self.paginas if (not x.isEmpty())]
         self.calcular_resultados(filled, count, m)
+        print("Final", f"{writes/self.nRegistros:.2f}")
 
-    def intercalar_polifasica(self, filled:deque[pagina], target:pagina):
+    def intercalar_polifasica(self, filled:deque[pagina], target:pagina) -> float:
+        nWrites = 0.0
         heap = Heap()
         for x in filled:
             heap.push(x.pop())
@@ -133,9 +141,10 @@ class ordenador:
             if (not self.paginas[item.index].isBlocked()):
                 heap.push(self.paginas[item.index].pop())
             new_sequence.append(item)
-            
-    
+            nWrites += 1
         target.add(new_sequence, target.index)
+
+        return nWrites
 
     #verifica se a ordenação finalizou
     def isOrdered(self):
@@ -154,7 +163,7 @@ class ordenador:
             sequencesCount+= x.getSequencesCount()
         b = (1/(m*sequencesCount))*self.nRegistros
 
-        print(round(b, 2))
+        print(f"{b:.2f}")
         for x in filled:
             print(x.index, ": ", sep="", end="")
             x.imprimir()
