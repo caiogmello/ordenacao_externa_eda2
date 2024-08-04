@@ -111,7 +111,7 @@ class ordenador:
             self.calcular_resultados(filled, count, m)
 
             
-            self.intercalar(filled, notFilled[0])
+            self.intercalar_polifasica(filled, notFilled[0])
             [x.active() for x in filled if x.isBlocked()]
             
             count+=1
@@ -119,6 +119,23 @@ class ordenador:
         
         filled = [x for x in self.paginas if (not x.isEmpty())]
         self.calcular_resultados(filled, count, m)
+
+    def intercalar_polifasica(self, filled:deque[pagina], target:pagina):
+        heap = Heap()
+        for x in filled:
+            heap.push(x.pop())
+        
+        new_sequence = deque()  #new_sequence representa a nova sequência que será gerada
+
+        #intercalação propriamente dita utilizando heap mim
+        while(len(heap) > 0):
+            item = heap.pop()
+            if (not self.paginas[item.index].isBlocked()):
+                heap.push(self.paginas[item.index].pop())
+            new_sequence.append(item)
+            
+    
+        target.add(new_sequence, target.index)
 
     #verifica se a ordenação finalizou
     def isOrdered(self):
