@@ -6,7 +6,7 @@ class fileManager:
     @staticmethod
     def read(filePath:str) -> tuple:
 
-        f = open(filePath, 'r')
+        f = open('example1', 'r')
 
         mode = f.readline()[0]
         specs = [int(x) for x in f.readline().split()]
