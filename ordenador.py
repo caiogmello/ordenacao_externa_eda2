@@ -160,7 +160,7 @@ class ordenador:
 
             maiorPagina: pagina = max(self.paginas, key=lambda x: len(x))
 
-            # até que a maior pagina seja esvaziada, tem que intercalar a polifásica
+            # até que a maior pagina seja esvaziada, tem que continuar intercalando
             while(not maiorPagina.isEmpty()):
                 writes += self.intercalar(filled, target)
                 [x.active() for x in filled if x.isBlocked()]
