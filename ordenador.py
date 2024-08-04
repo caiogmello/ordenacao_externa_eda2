@@ -17,7 +17,7 @@ class ordenador:
             case "B":
                 self.balanceada_multi_caminhos(m)
             case "P":
-                pass
+                self.polifasica(m)
             case "C":
                 pass
             case _:
@@ -101,6 +101,24 @@ class ordenador:
             new_sequence.append(item)
     
         target.add(new_sequence, target.index)
+
+    def polifasica(self, m):
+        count = 0
+        while(not self.isOrdered()):
+            filled = [x for x in self.paginas if (not x.isEmpty())]
+            notFilled = [x for x in self.paginas if (x.isEmpty())]
+
+            self.calcular_resultados(filled, count, m)
+
+            
+            self.intercalar(filled, notFilled[0])
+            [x.active() for x in filled if x.isBlocked()]
+            
+            count+=1
+
+        
+        filled = [x for x in self.paginas if (not x.isEmpty())]
+        self.calcular_resultados(filled, count, m)
 
     #verifica se a ordenação finalizou
     def isOrdered(self):
