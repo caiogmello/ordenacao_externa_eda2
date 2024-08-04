@@ -6,6 +6,9 @@ class pagina:
         self.blocked = False
         self.index = index
 
+    def getPageIndex(self) -> int:
+        return self.index
+
     def get(self, index:int) -> int:
         if (self.registros[index] is not None):
             return self.registros[index]
@@ -54,4 +57,7 @@ class pagina:
     
     def isEmpty(self):
         return len(self.registros) < 1
+    
+    def __len__(self):
+        return len(self.registros)
         

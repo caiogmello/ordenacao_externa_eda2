@@ -5,7 +5,7 @@ from Registro import Registro
 
 class ordenador:
     def __init__(self):
-        self.paginas:deque[pagina] = deque()
+        self.paginas:deque[pagina] = deque()     
         self.nRegistros = 0
 
     def ordenar(self, method:str, m:int, k:int, r:int, n:int, registros:list[int]):
@@ -19,7 +19,7 @@ class ordenador:
             case "P":
                 self.polifasica(m)
             case "C":
-                pass
+                self.cascata(m)
             case _:
                 self.balanceada_multi_caminhos(m)
 
@@ -145,6 +145,37 @@ class ordenador:
         target.add(new_sequence, target.index)
 
         return nWrites
+
+    def cascata(self, m):
+        count = 0
+        writes = 0.0
+
+        # até sobrar apenas um arquivo
+        while(not self.isOrdered()):
+            filled = [x for x in self.paginas if (not x.isEmpty())]
+            notFilled = [x for x in self.paginas if (x.isEmpty())]
+            target = notFilled[0]
+
+            self.calcular_resultados(filled, count, m)
+
+            maiorPagina: pagina = max(self.paginas, key=lambda x: len(x))
+
+            # até que a maior pagina seja esvaziada, tem que intercalar a polifásica
+            while(not maiorPagina.isEmpty()):
+                writes += self.intercalar(filled, target)
+                [x.active() for x in filled if x.isBlocked()]
+
+                # se esvaziar alguma página no caminho, muda o alvo
+                notFilled = [x for x in self.paginas if (x.isEmpty())]
+                if (len(notFilled) != 0):
+                    target = notFilled[0]
+                    
+            count+=1
+
+        filled = [x for x in self.paginas if (not x.isEmpty())]
+        self.calcular_resultados(filled, count, m)
+        print("Final", f"{writes/self.nRegistros:.2f}")
+
 
     #verifica se a ordenação finalizou
     def isOrdered(self):
