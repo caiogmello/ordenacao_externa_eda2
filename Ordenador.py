@@ -3,9 +3,9 @@ from Pagina import Pagina
 from Heap import Heap
 from Registro import Registro
 
-class ordenador:
+class Ordenador:
     def __init__(self):
-        self.aginas:deque[Pagina] = deque()     
+        self.paginas:deque[Pagina] = deque()     
         self.nRegistros = 0
 
     def ordenar(self, method:str,
