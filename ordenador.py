@@ -200,7 +200,7 @@ class ordenador:
 
         print(f"{b:.2f}")
         for x in filled:
-            print(x.index, ": ", sep="", end="")
+            print(x.index+1, ": ", sep="", end="")
             x.imprimir()
             print()
 
