@@ -59,5 +59,9 @@ class pagina:
         return len(self.registros) < 1
     
     def __len__(self):
-        return len(self.registros)
+        qtdRegistros = 0
+        for sequence in self.registros:
+            qtdRegistros += len(sequence)
+
+        return qtdRegistros
         
