@@ -130,19 +130,23 @@ class ordenador:
     def intercalar_polifasica(self, filled:deque[pagina], target:pagina) -> float:
         nWrites = 0.0
         heap = Heap()
-        for x in filled:
-            heap.push(x.pop())
-        
-        new_sequence = deque()  #new_sequence representa a nova sequência que será gerada
 
-        #intercalação propriamente dita utilizando heap mim
-        while(len(heap) > 0):
-            item = heap.pop()
-            if (not self.paginas[item.index].isBlocked()):
-                heap.push(self.paginas[item.index].pop())
-            new_sequence.append(item)
-            nWrites += 1
-        target.add(new_sequence, target.index)
+        while(not self.isAnyPageEmpty(filled)):
+            for x in filled:
+                heap.push(x.pop())
+            
+            new_sequence = deque()  #new_sequence representa a nova sequência que será gerada
+
+            #intercalação propriamente dita utilizando heap mim
+            while(len(heap) > 0):
+                item = heap.pop()
+                if (not self.paginas[item.index].isBlocked()):
+                    heap.push(self.paginas[item.index].pop())
+                new_sequence.append(item)
+                nWrites += 1
+            target.add(new_sequence, target.index)
+
+            [x.active() for x in filled if x.isBlocked()]
 
         return nWrites
 
@@ -199,6 +203,12 @@ class ordenador:
             print(x.index, ": ", sep="", end="")
             x.imprimir()
             print()
+
+    def isAnyPageEmpty(self, pages):
+        for page in pages:
+            if (page.isEmpty()): return True
+        
+        return False
 
 
 
