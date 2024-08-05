@@ -1,6 +1,6 @@
 from collections import deque
 
-class pagina:
+class Pagina:
     def __init__(self, index):
         self.registros:deque[deque] = deque()
         self.blocked = False
@@ -12,7 +12,7 @@ class pagina:
     def get(self, index:int) -> int:
         if (self.registros[index] is not None):
             return self.registros[index]
-        return -1;
+        return -1
 
     def pop(self):
         item = self.registros[0].popleft()

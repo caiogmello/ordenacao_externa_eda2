@@ -1,14 +1,16 @@
 from collections import deque
-from pagina import pagina
+from Pagina import Pagina
 from Heap import Heap
 from Registro import Registro
 
 class ordenador:
     def __init__(self):
-        self.paginas:deque[pagina] = deque()     
+        self.aginas:deque[Pagina] = deque()     
         self.nRegistros = 0
 
-    def ordenar(self, method:str, m:int, k:int, r:int, n:int, registros:list[int]):
+    def ordenar(self, method:str,
+                 m:int, k:int, r:int, n:int,
+                   registros:list[int]) -> None:
         self.criarPaginas(k)
         if (method == "B"): limitePaginas = k//2
         else: limitePaginas = k-1
@@ -23,11 +25,13 @@ class ordenador:
             case _:
                 self.balanceada_multi_caminhos(m)
 
-    def criarPaginas(self, k:int):
+    def criarPaginas(self, k:int) -> None:
         for i in range(k):
-            self.paginas.append(pagina(i))
+            self.paginas.append(Pagina(i))
     
-    def gerarSequencais(self, registros:list[int], m:int, r:int, limitePaginas:int):
+    def gerarSequencais(self, registros:list[int],
+                         m:int, r:int,
+                           limitePaginas:int) -> None:
         heap = Heap()
         sequence:deque[Registro] = deque()
         pageCounter = 0
@@ -53,9 +57,14 @@ class ordenador:
                 self.paginas[pageCounter].add(sequence, pageCounter)
                 self.nRegistros+= len(sequence)
                 sequenceCounter+=1
-                if(sequenceCounter == r):return
+
+                if(sequenceCounter == r): 
+                    return
                 pageCounter+=1
-                if (pageCounter == limitePaginas): pageCounter = 0
+
+                if (pageCounter == limitePaginas): 
+                    pageCounter = 0
+
                 sequence = deque()
         
         while(not heap.isEmpty()):
@@ -64,17 +73,18 @@ class ordenador:
         self.nRegistros+= len(sequence)
         self.paginas[pageCounter].add(sequence, pageCounter)
 
-    def balanceada_multi_caminhos(self, m:int):
+    def balanceadaMultiCaminhos(self, m:int) -> None:
         count = 0
         writes = 0.0
         while(not self.isOrdered()):
             filled = [x for x in self.paginas if (not x.isEmpty())]
             notFilled = [x for x in self.paginas if (x.isEmpty())]
 
-            self.calcular_resultados(filled, count, m)
+            self.calcularResultados(filled, count, m)
 
             for x in notFilled:
-                if (self.isOrdered()) : break;
+                if (self.isOrdered()):
+                    break
                 writes += self.intercalar(filled, x)
                 [x.active() for x in filled if x.isBlocked()]
             
@@ -82,11 +92,11 @@ class ordenador:
 
         
         filled = [x for x in self.paginas if (not x.isEmpty())]
-        self.calcular_resultados(filled, count, m)
+        self.calcularResultados(filled, count, m)
         print("Final", f"{writes/self.nRegistros:.2f}")
             
         
-    def intercalar(self, filled:deque[pagina], target:pagina) -> float:
+    def intercalar(self, filled:deque[Pagina], target:Pagina) -> float:
         nWrites = 0.0
         heap = Heap()
         for x in filled:
@@ -107,27 +117,27 @@ class ordenador:
         target.add(new_sequence, target.index)
         return nWrites
 
-    def polifasica(self, m):
+    def polifasica(self, m) -> None:
         count = 0
         writes = 0.0
         while(not self.isOrdered()):
             filled = [x for x in self.paginas if (not x.isEmpty())]
             notFilled = [x for x in self.paginas if (x.isEmpty())]
 
-            self.calcular_resultados(filled, count, m)
+            self.calcularResultados(filled, count, m)
 
             
-            writes += self.intercalar_polifasica(filled, notFilled[0])
+            writes += self.intercalarPolifasica(filled, notFilled[0])
             [x.active() for x in filled if x.isBlocked()]
             
             count+=1
 
         
         filled = [x for x in self.paginas if (not x.isEmpty())]
-        self.calcular_resultados(filled, count, m)
+        self.calcularResultados(filled, count, m)
         print("Final", f"{writes/self.nRegistros:.2f}")
 
-    def intercalar_polifasica(self, filled:deque[pagina], target:pagina) -> float:
+    def intercalarPolifasica(self, filled:deque[Pagina], target:Pagina) -> float:
         nWrites = 0.0
         heap = Heap()
 
@@ -150,7 +160,7 @@ class ordenador:
 
         return nWrites
 
-    def cascata(self, m):
+    def cascata(self, m) -> None:
         count = 0
         writes = 0.0
 
@@ -160,9 +170,9 @@ class ordenador:
             notFilled = [x for x in self.paginas if (x.isEmpty())]
             target = notFilled[0]
 
-            self.calcular_resultados(filled, count, m)
+            self.calcularResultados(filled, count, m)
 
-            maiorPagina: pagina = max(self.paginas, key=lambda x: len(x))
+            maiorPagina: Pagina = max(self.paginas, key=lambda x: len(x))
 
             # até que a maior pagina seja esvaziada, tem que continuar intercalando
             while(not maiorPagina.isEmpty()):
@@ -177,21 +187,24 @@ class ordenador:
             count+=1
 
         filled = [x for x in self.paginas if (not x.isEmpty())]
-        self.calcular_resultados(filled, count, m)
+        self.calcularResultados(filled, count, m)
         print("Final", f"{writes/self.nRegistros:.2f}")
 
 
     #verifica se a ordenação finalizou
-    def isOrdered(self):
+    def isOrdered(self) -> bool:
         count = 0
         for pagina in self.paginas:
-            if (not pagina.isEmpty()): count+=1
+            if (not pagina.isEmpty()): 
+                count+=1
         
-        if count == 1: return True
+        if count == 1: 
+            return True
+        
         return False
 
     #So organiza o print e calcula os resultados
-    def calcular_resultados(self, filled:list[Registro], count:int, m:int):
+    def calcularResultados(self, filled:list[Registro], count:int, m:int):
         print("Fase", count, end=" ")
         sequencesCount = 0
         for x in filled:
@@ -206,7 +219,8 @@ class ordenador:
 
     def isAnyPageEmpty(self, pages):
         for page in pages:
-            if (page.isEmpty()): return True
+            if (page.isEmpty()): 
+                return True
         
         return False
 

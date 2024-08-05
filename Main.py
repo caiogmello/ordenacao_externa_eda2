@@ -1,6 +1,6 @@
-from fileManager import fileManager
+from FileManager import fileManager
 from Registro import Registro
-from ordenador import ordenador
+from Ordenador import ordenador
 
 if __name__ == "__main__":
     

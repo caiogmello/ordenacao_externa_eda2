@@ -1,6 +1,3 @@
-import os
-
-
 class fileManager:
 
     @staticmethod
