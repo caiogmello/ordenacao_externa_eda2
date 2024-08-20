@@ -188,7 +188,7 @@ class Ordenador:
 
         filled = [x for x in self.paginas if (not x.isEmpty())]
         self.imprimir_resultados(filled, count, m)
-        print("Final", f"{writes/self.nRegistros:.2f}")
+        print("Final", f"{self.calcular_alpha():.2f}")
 
 
     #verifica se a ordenação finalizou
@@ -212,6 +212,9 @@ class Ordenador:
         
         b = (1/(m*sequencesCount))*self.nRegistros
         return b
+    
+    def calcular_alpha(self, writes):
+        return writes/self.nRegistros
         
         
     def imprimir_resultados(self, filled:list[Registro], count:int, m:int):
