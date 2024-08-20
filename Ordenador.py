@@ -93,7 +93,7 @@ class Ordenador:
         
         filled = [x for x in self.paginas if (not x.isEmpty())]
         self.imprimir_resultados(filled, count, m)
-        print("Final", f"{writes/self.nRegistros:.2f}")
+        print("Final", f"{self.calcular_alpha(writes):.2f}")
             
         
     def intercalar(self, filled:deque[Pagina], target:Pagina) -> float:
@@ -135,7 +135,7 @@ class Ordenador:
         
         filled = [x for x in self.paginas if (not x.isEmpty())]
         self.imprimir_resultados(filled, count, m)
-        print("Final", f"{writes/self.nRegistros:.2f}")
+        print("Final", f"{self.calcular_alpha(writes):.2f}")
 
     def intercalarPolifasica(self, filled:deque[Pagina], target:Pagina) -> float:
         nWrites = 0.0
@@ -188,7 +188,7 @@ class Ordenador:
 
         filled = [x for x in self.paginas if (not x.isEmpty())]
         self.imprimir_resultados(filled, count, m)
-        print("Final", f"{self.calcular_alpha():.2f}")
+        print("Final", f"{self.calcular_alpha(writes):.2f}")
 
 
     #verifica se a ordenação finalizou
