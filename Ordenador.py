@@ -80,7 +80,7 @@ class Ordenador:
             filled = [x for x in self.paginas if (not x.isEmpty())]
             notFilled = [x for x in self.paginas if (x.isEmpty())]
 
-            self.calcularResultados(filled, count, m)
+            self.imprimir_resultados(filled, count, m)
 
             for x in notFilled:
                 if (self.isOrdered()):
@@ -92,7 +92,7 @@ class Ordenador:
 
         
         filled = [x for x in self.paginas if (not x.isEmpty())]
-        self.calcularResultados(filled, count, m)
+        self.imprimir_resultados(filled, count, m)
         print("Final", f"{writes/self.nRegistros:.2f}")
             
         
@@ -124,7 +124,7 @@ class Ordenador:
             filled = [x for x in self.paginas if (not x.isEmpty())]
             notFilled = [x for x in self.paginas if (x.isEmpty())]
 
-            self.calcularResultados(filled, count, m)
+            self.imprimir_resultados(filled, count, m)
 
             
             writes += self.intercalarPolifasica(filled, notFilled[0])
@@ -134,7 +134,7 @@ class Ordenador:
 
         
         filled = [x for x in self.paginas if (not x.isEmpty())]
-        self.calcularResultados(filled, count, m)
+        self.imprimir_resultados(filled, count, m)
         print("Final", f"{writes/self.nRegistros:.2f}")
 
     def intercalarPolifasica(self, filled:deque[Pagina], target:Pagina) -> float:
@@ -170,7 +170,7 @@ class Ordenador:
             notFilled = [x for x in self.paginas if (x.isEmpty())]
             target = notFilled[0]
 
-            self.calcularResultados(filled, count, m)
+            self.imprimir_resultados(filled, count, m)
 
             maiorPagina: Pagina = max(self.paginas, key=lambda x: len(x))
 
@@ -187,7 +187,7 @@ class Ordenador:
             count+=1
 
         filled = [x for x in self.paginas if (not x.isEmpty())]
-        self.calcularResultados(filled, count, m)
+        self.imprimir_resultados(filled, count, m)
         print("Final", f"{writes/self.nRegistros:.2f}")
 
 
@@ -204,12 +204,19 @@ class Ordenador:
         return False
 
     #So organiza o print e calcula os resultados
-    def calcularResultados(self, filled:list[Registro], count:int, m:int):
-        print("Fase", count, end=" ")
+
+    def calcular_beta(self, filled, m):
         sequencesCount = 0
         for x in filled:
             sequencesCount+= x.getSequencesCount()
+        
         b = (1/(m*sequencesCount))*self.nRegistros
+        return b
+        
+        
+    def imprimir_resultados(self, filled:list[Registro], count:int, m:int):
+        print("Fase", count, end=" ")
+        b = self.calcular_beta(filled, m)
 
         print(f"{b:.2f}")
         for x in filled:
