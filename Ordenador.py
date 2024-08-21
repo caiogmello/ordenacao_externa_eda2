@@ -17,13 +17,13 @@ class Ordenador:
         self.gerarSequencais(registros, m, r, limitePaginas)
         match method:
             case "B":
-                self.balanceada_multi_caminhos(m)
+                self.balanceadaMultiCaminhos(m)
             case "P":
                 self.polifasica(m)
             case "C":
                 self.cascata(m)
             case _:
-                self.balanceada_multi_caminhos(m)
+                self.balanceadaMultiCaminhos(m)
 
     def criarPaginas(self, k:int) -> None:
         for i in range(k):
@@ -49,6 +49,9 @@ class Ordenador:
             if (heap.first().flag == 1):
                 heap.unflagAll()
 
+            # TODO: ver se essa lógica aqui tá certa
+            # tipo, se a heap tá cheia, mas tiver toda flagada, ainda assim 
+            # tem que inserir o novo registro? n pode ser
             if (len(heap) == m):
                 sequence.append(heap.pop())
                 heap.push(new_registro)
