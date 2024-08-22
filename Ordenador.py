@@ -13,14 +13,18 @@ class Ordenador:
 
     def ordenar(self, method:str,
                  m:int, k:int, r:int, n:int,
-                   registros:list[int]) -> None:
+                   registros:list[int], teste: bool = False, to_print: bool = True) -> None:
         self.criarPaginas(k)
         if (method == "B"): 
             limitePaginas = k//2
         else: 
             limitePaginas = k-1
-            
-        self.gerarSequencais(registros, m, r, limitePaginas)
+        
+        if not teste:
+            self.gerarSequencais(registros, m, r, limitePaginas)
+        if teste:
+            print(m, r, limitePaginas)
+            self.paginas = self.gerarRSequencias(n, r, k, method)
         
         match method:
             case "B":
@@ -39,6 +43,49 @@ class Ordenador:
     def criarPaginas(self, k:int) -> None:
         for i in range(k):
             self.paginas.append(Pagina(i))
+    
+    def gerarRSequencias(self, n, r, k, metodo):
+        import random
+                
+        limite_de_paginas = k-1
+        if metodo == "B":
+            limite_de_paginas = k//2
+            
+        paginas = deque()
+        for i in range(k):
+            paginas.append(Pagina(i))
+        
+        usados = [0]*n
+
+        page_counter = 0
+        sequencia = deque()
+        seq_counter = 0
+        n_registros = 0
+        while(seq_counter<r):
+            valor = random.randint(1,n)
+            if usados[valor-1] == 1:
+                continue
+            else:
+                n_registros+=1
+                if(len(sequencia)==0):
+                    sequencia.append(Registro(valor))
+                    usados[valor-1] = 1
+                else:
+                    if(sequencia[-1].value < Registro(valor).value):
+                        sequencia.append(Registro(valor))
+                        usados[valor-1] = 1
+                    else:
+                        paginas[page_counter].add(sequencia, page_counter)
+                        page_counter+=1
+                        seq_counter+=1
+                        n_registros-=1
+                        page_counter%=limite_de_paginas
+                        sequencia = deque()
+                     
+        self.nRegistros = n_registros
+        
+        return paginas
+
     
     def gerarSequencais(self, registros:list[int],
                          m:int, r:int,
