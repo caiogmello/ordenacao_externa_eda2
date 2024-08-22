@@ -1,4 +1,5 @@
 from collections import deque
+from Registro import Registro
 
 class Pagina:
     def __init__(self, index):
@@ -30,7 +31,7 @@ class Pagina:
         if(len(self.registros) > index):
             self.registros[index] = value
 
-    def add(self, sequence:deque, index:int):
+    def add(self, sequence:deque[Registro], index:int):
         for elem in sequence:
             elem.setIndex(index)
             elem.delFlag()

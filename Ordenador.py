@@ -7,14 +7,21 @@ class Ordenador:
     def __init__(self):
         self.paginas:deque[Pagina] = deque()     
         self.nRegistros = 0
+        self.betas = []
+        self.alpha = -1.0
+        self.paginaFinal = None
 
     def ordenar(self, method:str,
                  m:int, k:int, r:int, n:int,
                    registros:list[int]) -> None:
         self.criarPaginas(k)
-        if (method == "B"): limitePaginas = k//2
-        else: limitePaginas = k-1
+        if (method == "B"): 
+            limitePaginas = k//2
+        else: 
+            limitePaginas = k-1
+            
         self.gerarSequencais(registros, m, r, limitePaginas)
+        
         match method:
             case "B":
                 self.balanceadaMultiCaminhos(m)
@@ -24,6 +31,10 @@ class Ordenador:
                 self.cascata(m)
             case _:
                 self.balanceadaMultiCaminhos(m)
+
+        self.paginas.clear()
+        self.nRegistros = 0
+
 
     def criarPaginas(self, k:int) -> None:
         for i in range(k):
@@ -36,29 +47,29 @@ class Ordenador:
         sequence:deque[Registro] = deque()
         pageCounter = 0
         sequenceCounter = 0
+
+        count = 0
         for elem in registros:
             new_registro = Registro(elem)
 
             if (len(heap) < m):
                 heap.push(new_registro)
+                count+=1
                 continue
 
             if (len(heap) == m and elem < heap.first().value):
-                 new_registro.setFlag()
+                new_registro.setFlag()
 
             if (heap.first().flag == 1):
                 heap.unflagAll()
 
-            # TODO: ver se essa lógica aqui tá certa
-            # tipo, se a heap tá cheia, mas tiver toda flagada, ainda assim 
-            # tem que inserir o novo registro? n pode ser
-            if (len(heap) == m):
+            if (len(heap) == m): 
                 sequence.append(heap.pop())
                 heap.push(new_registro)
 
             if (not heap.isEmpty() and heap.first().flag == 1):
                 self.paginas[pageCounter].add(sequence, pageCounter)
-                self.nRegistros+= len(sequence)
+                self.nRegistros += len(sequence)
                 sequenceCounter+=1
 
                 if(sequenceCounter == r): 
@@ -69,11 +80,13 @@ class Ordenador:
                     pageCounter = 0
 
                 sequence = deque()
+            
+            count+=1
         
         while(not heap.isEmpty()):
             sequence.append(heap.pop())
         
-        self.nRegistros+= len(sequence)
+        self.nRegistros += len(sequence)
         self.paginas[pageCounter].add(sequence, pageCounter)
 
     def balanceadaMultiCaminhos(self, m:int) -> None:
@@ -96,7 +109,9 @@ class Ordenador:
         
         filled = [x for x in self.paginas if (not x.isEmpty())]
         self.imprimir_resultados(filled, count, m)
-        print("Final", f"{self.calcular_alpha(writes):.2f}")
+        self.paginaFinal = filled
+        self.alpha = self.calcular_alpha(writes)
+        print("Final", f"{self.alpha:.2f}")
             
         
     def intercalar(self, filled:deque[Pagina], target:Pagina) -> float:
@@ -138,7 +153,9 @@ class Ordenador:
         
         filled = [x for x in self.paginas if (not x.isEmpty())]
         self.imprimir_resultados(filled, count, m)
-        print("Final", f"{self.calcular_alpha(writes):.2f}")
+        self.paginaFinal = filled
+        self.alpha = self.calcular_alpha(writes)
+        print("Final", f"{self.alpha:.2f}")
 
     def intercalarPolifasica(self, filled:deque[Pagina], target:Pagina) -> float:
         nWrites = 0.0
@@ -190,8 +207,10 @@ class Ordenador:
             count+=1
 
         filled = [x for x in self.paginas if (not x.isEmpty())]
+        self.paginaFinal = filled
         self.imprimir_resultados(filled, count, m)
-        print("Final", f"{self.calcular_alpha(writes):.2f}")
+        self.alpha = self.calcular_alpha(writes)
+        print("Final", f"{self.alpha:.2f}")
 
 
     #verifica se a ordenação finalizou
@@ -208,7 +227,7 @@ class Ordenador:
 
     #So organiza o print e calcula os resultados
 
-    def calcular_beta(self, filled, m):
+    def calcular_beta(self, filled:list[Pagina], m):
         sequencesCount = 0
         for x in filled:
             sequencesCount+= x.getSequencesCount()
@@ -220,17 +239,18 @@ class Ordenador:
         return writes/self.nRegistros
         
         
-    def imprimir_resultados(self, filled:list[Registro], count:int, m:int):
+    def imprimir_resultados(self, filled:list[Pagina], count:int, m:int):
         print("Fase", count, end=" ")
         b = self.calcular_beta(filled, m)
+        self.betas += [b]
 
         print(f"{b:.2f}")
         for x in filled:
             print(x.index+1, ": ", sep="", end="")
-            x.imprimir()
+            x.imprimir() 
             print()
 
-    def isAnyPageEmpty(self, pages):
+    def isAnyPageEmpty(self, pages:list[Pagina]):
         for page in pages:
             if (page.isEmpty()): 
                 return True
