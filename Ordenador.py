@@ -147,6 +147,7 @@ class Ordenador:
                 self.imprimir_resultados(filled, count, m, to_print
                 )
 
+            # roda o loop até que os primeiro arquivo de filled esteja vazio (terminou a intercalação da fase)
             while not filled[0].isEmpty():
                 for x in notFilled:
                     if (self.isOrdered()):
