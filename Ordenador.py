@@ -15,6 +15,7 @@ class Ordenador:
                  m:int, k:int, r:int, n:int,
                    registros:list[int], teste: bool = False, to_print: bool = True) -> None:
         self.criarPaginas(k)
+        self.betas.clear()
         if (method == "B"): 
             limitePaginas = k//2
         else: 
@@ -23,18 +24,17 @@ class Ordenador:
         if not teste:
             self.gerarSequencais(registros, m, r, limitePaginas)
         if teste:
-            print(m, r, limitePaginas)
             self.paginas = self.gerarRSequencias(n, r, k, method)
         
         match method:
             case "B":
-                self.balanceadaMultiCaminhos(m)
+                self.balanceadaMultiCaminhos(m, to_print, )
             case "P":
-                self.polifasica(m)
+                self.polifasica(m, to_print)
             case "C":
-                self.cascata(m)
+                self.cascata(m, to_print)
             case _:
-                self.balanceadaMultiCaminhos(m)
+                self.balanceadaMultiCaminhos(m, to_print)
 
         self.paginas.clear()
         self.nRegistros = 0
@@ -136,14 +136,16 @@ class Ordenador:
         self.nRegistros += len(sequence)
         self.paginas[pageCounter].add(sequence, pageCounter)
 
-    def balanceadaMultiCaminhos(self, m:int) -> None:
+    def balanceadaMultiCaminhos(self, m:int, to_print:bool=True) -> None:
         count = 0
         writes = 0.0
         while(not self.isOrdered()):
             filled = [x for x in self.paginas if (not x.isEmpty())]
             notFilled = [x for x in self.paginas if (x.isEmpty())]
 
-            self.imprimir_resultados(filled, count, m)
+            if to_print:
+                self.imprimir_resultados(filled, count, m, to_print
+                )
 
             for x in notFilled:
                 if (self.isOrdered()):
@@ -155,10 +157,11 @@ class Ordenador:
 
         
         filled = [x for x in self.paginas if (not x.isEmpty())]
-        self.imprimir_resultados(filled, count, m)
+        self.imprimir_resultados(filled, count, m, to_print)
         self.paginaFinal = filled
         self.alpha = self.calcular_alpha(writes)
-        print("Final", f"{self.alpha:.2f}")
+        if to_print:
+            print("Final", f"{self.alpha:.2f}")
             
         
     def intercalar(self, filled:deque[Pagina], target:Pagina) -> float:
@@ -182,14 +185,14 @@ class Ordenador:
         target.add(new_sequence, target.index)
         return nWrites
 
-    def polifasica(self, m) -> None:
+    def polifasica(self, m, to_print: bool = True) -> None:
         count = 0
         writes = 0.0
         while(not self.isOrdered()):
             filled = [x for x in self.paginas if (not x.isEmpty())]
             notFilled = [x for x in self.paginas if (x.isEmpty())]
 
-            self.imprimir_resultados(filled, count, m)
+            self.imprimir_resultados(filled, count, m, to_print)
 
             
             writes += self.intercalarPolifasica(filled, notFilled[0])
@@ -199,10 +202,11 @@ class Ordenador:
 
         
         filled = [x for x in self.paginas if (not x.isEmpty())]
-        self.imprimir_resultados(filled, count, m)
+        self.imprimir_resultados(filled, count, m, to_print)
         self.paginaFinal = filled
         self.alpha = self.calcular_alpha(writes)
-        print("Final", f"{self.alpha:.2f}")
+        if to_print:
+            print("Final", f"{self.alpha:.2f}")
 
     def intercalarPolifasica(self, filled:deque[Pagina], target:Pagina) -> float:
         nWrites = 0.0
@@ -227,7 +231,7 @@ class Ordenador:
 
         return nWrites
 
-    def cascata(self, m) -> None:
+    def cascata(self, m, to_print:bool=True) -> None:
         count = 0
         writes = 0.0
 
@@ -237,7 +241,7 @@ class Ordenador:
             notFilled = [x for x in self.paginas if (x.isEmpty())]
             target = notFilled[0]
 
-            self.imprimir_resultados(filled, count, m)
+            self.imprimir_resultados(filled, count, m, to_print)
 
             maiorPagina: Pagina = max(self.paginas, key=lambda x: len(x))
 
@@ -255,9 +259,10 @@ class Ordenador:
 
         filled = [x for x in self.paginas if (not x.isEmpty())]
         self.paginaFinal = filled
-        self.imprimir_resultados(filled, count, m)
+        self.imprimir_resultados(filled, count, m, to_print)
         self.alpha = self.calcular_alpha(writes)
-        print("Final", f"{self.alpha:.2f}")
+        if to_print:
+            print("Final", f"{self.alpha:.2f}")
 
 
     #verifica se a ordenação finalizou
@@ -283,19 +288,21 @@ class Ordenador:
         return b
     
     def calcular_alpha(self, writes):
-        return writes/self.nRegistros
+        return round(writes/self.nRegistros,4)
         
         
-    def imprimir_resultados(self, filled:list[Pagina], count:int, m:int):
-        print("Fase", count, end=" ")
+    def imprimir_resultados(self, filled:list[Pagina], count:int, m:int, to_print:bool=True):
+        if to_print:
+            print("Fase", count, end=" ")
         b = self.calcular_beta(filled, m)
-        self.betas += [b]
+        self.betas += [round(b,4)]
 
-        print(f"{b:.2f}")
-        for x in filled:
-            print(x.index+1, ": ", sep="", end="")
-            x.imprimir() 
-            print()
+        if to_print:
+            print(f"{b:.2f}")
+            for x in filled:
+                print(x.index+1, ": ", sep="", end="")
+                x.imprimir() 
+                print()
 
     def isAnyPageEmpty(self, pages:list[Pagina]):
         for page in pages:
