@@ -58,20 +58,21 @@ class Ordenador:
         sequencia = deque()
         arquivos_possiveis = list(np.random.permutation(n))
 
+        
         page_counter = 0
         seq_counter = 0
         n_registros = 0
-        i = 0
 
         while(seq_counter<r):
             if(len(sequencia)==0):
-                sequencia.append(Registro(arquivos_possiveis[i]))
+                sequencia.append(Registro(arquivos_possiveis[n_registros]))
                 n_registros+=1
                 i+=1
                 continue
 
-            if(sequencia[-1].value < Registro(arquivos_possiveis[i]).value):
-                sequencia.append(Registro(arquivos_possiveis[i]))
+            if(sequencia[-1].value < Registro(arquivos_possiveis[n_registros]).value):
+                sequencia.append(Registro(arquivos_possiveis[n_registros]))
+                n_registros+=1
             else:
                 paginas[page_counter].add(sequencia, page_counter)
                 page_counter+=1
@@ -79,10 +80,9 @@ class Ordenador:
                 page_counter%=limite_de_paginas
                 sequencia = deque()
 
-            n_registros+=1
-            i+=1
                      
         self.nRegistros = n_registros
+        print(arquivos_possiveis[:n_registros])
         
         return paginas
 
@@ -172,9 +172,9 @@ class Ordenador:
         nWrites = 0.0
         heap = Heap()
         for x in filled:
-            if(x.isEmpty()):  #se a pagina está vazia eu simplesmente skipo ela
-                pass
-            else: heap.push(x.pop())
+            if(not x.isEmpty()):  #se a pagina está vazia eu simplesmente skipo ela
+                # print(x)
+                heap.push(x.pop())
         
         new_sequence = deque()  #new_sequence representa a nova sequência que será gerada
 
@@ -273,7 +273,7 @@ class Ordenador:
     def isOrdered(self) -> bool:
         count = 0
         for pagina in self.paginas:
-            if (not pagina.isEmpty()): 
+            if (not pagina.isEmpty() and pagina.getSequencesCount() == 1):
                 count+=1
         
         if count == 1: 
