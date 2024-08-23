@@ -90,7 +90,7 @@ class Ordenador:
 
                      
         self.nRegistros = n_registros
-        print(arquivos_possiveis[:n_registros])
+        # print(arquivos_possiveis[:n_registros])
         
         return paginas
 
