@@ -45,7 +45,7 @@ class Ordenador:
             self.paginas.append(Pagina(i))
     
     def gerarRSequencias(self, n, r, k, metodo):
-        import random
+        import numpy as np
                 
         limite_de_paginas = k-1
         if metodo == "B":
@@ -55,32 +55,32 @@ class Ordenador:
         for i in range(k):
             paginas.append(Pagina(i))
         
-        usados = [0]*n
+        sequencia = deque()
+        arquivos_possiveis = list(np.random.permutation(n))
 
         page_counter = 0
-        sequencia = deque()
         seq_counter = 0
         n_registros = 0
+        i = 0
+
         while(seq_counter<r):
-            valor = random.randint(1,n)
-            if usados[valor-1] == 1:
-                continue
-            else:
+            if(len(sequencia)==0):
+                sequencia.append(Registro(arquivos_possiveis[i]))
                 n_registros+=1
-                if(len(sequencia)==0):
-                    sequencia.append(Registro(valor))
-                    usados[valor-1] = 1
-                else:
-                    if(sequencia[-1].value < Registro(valor).value):
-                        sequencia.append(Registro(valor))
-                        usados[valor-1] = 1
-                    else:
-                        paginas[page_counter].add(sequencia, page_counter)
-                        page_counter+=1
-                        seq_counter+=1
-                        n_registros-=1
-                        page_counter%=limite_de_paginas
-                        sequencia = deque()
+                i+=1
+                continue
+
+            if(sequencia[-1].value < Registro(arquivos_possiveis[i]).value):
+                sequencia.append(Registro(arquivos_possiveis[i]))
+            else:
+                paginas[page_counter].add(sequencia, page_counter)
+                page_counter+=1
+                seq_counter+=1
+                page_counter%=limite_de_paginas
+                sequencia = deque()
+
+            n_registros+=1
+            i+=1
                      
         self.nRegistros = n_registros
         
