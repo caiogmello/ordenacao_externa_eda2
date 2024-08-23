@@ -9,6 +9,16 @@ class Pagina:
 
     def getPageIndex(self) -> int:
         return self.index
+    
+    def get_smallest_subsequence(self):
+        filled = [x for x in self.registros if(len(x) > 0)]
+        if(len(filled) > 1):
+            smallest = filled[0]
+            for i in range(1, len(filled)):
+                if (len(filled[i]) < len(smallest)):
+                    smallest = filled[i]
+
+            return smallest
 
     def get(self, index:int) -> int:
         if (self.registros[index] is not None):

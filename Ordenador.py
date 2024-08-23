@@ -63,6 +63,14 @@ class Ordenador:
         seq_counter = 0
         n_registros = 0
 
+
+        if(r % limite_de_paginas == 0):
+            sequencia.append(Registro(arquivos_possiveis[n_registros]))
+            n_registros+=1
+            paginas[page_counter].add(sequencia, page_counter)
+            sequencia = deque()
+            r-=1
+            
         while(seq_counter<r):
             if(len(sequencia)==0):
                 sequencia.append(Registro(arquivos_possiveis[n_registros]))
@@ -195,11 +203,11 @@ class Ordenador:
         while(not self.isOrdered()):
             filled = [x for x in self.paginas if (not x.isEmpty())]
             notFilled = [x for x in self.paginas if (x.isEmpty())]
+            smallest_subsequence_page = self.get_smallest_page(filled)
 
             self.imprimir_resultados(filled, count, m, to_print)
 
-            
-            writes += self.intercalarPolifasica(filled, notFilled[0])
+            writes += self.intercalarPolifasica(smallest_subsequence_page, filled, notFilled[0])
             [x.active() for x in filled if x.isBlocked()]
             
             count+=1
@@ -212,11 +220,11 @@ class Ordenador:
         if to_print:
             print("Final", f"{self.alpha:.2f}")
 
-    def intercalarPolifasica(self, filled:deque[Pagina], target:Pagina) -> float:
+    def intercalarPolifasica(self, smallest_page:Pagina, filled:deque[Pagina], target:Pagina) -> float:
         nWrites = 0.0
         heap = Heap()
 
-        while(not self.isAnyPageEmpty(filled)):
+        while(not smallest_page.isEmpty()):
             for x in filled:
                 heap.push(x.pop())
             
@@ -268,13 +276,24 @@ class Ordenador:
         if to_print:
             print("Final", f"{self.alpha:.2f}")
 
+    def get_smallest_page(self, filled:deque[Pagina]):
+        smallest = filled[0]
+        for i in range(1, len(filled)):
+            if(filled[i].getSequencesCount() < smallest.getSequencesCount()):
+                smallest = filled[i]
+        return smallest
+            
+
 
     #verifica se a ordenação finalizou
     def isOrdered(self) -> bool:
         count = 0
         for pagina in self.paginas:
-            if (not pagina.isEmpty() and pagina.getSequencesCount() == 1):
-                count+=1
+            if (not pagina.isEmpty()):
+                if( pagina.getSequencesCount() == 1):
+                    count+=1
+                else:
+                    return False
         
         if count == 1: 
             return True
