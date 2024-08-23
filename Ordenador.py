@@ -90,7 +90,7 @@ class Ordenador:
 
                      
         self.nRegistros = n_registros
-        print(arquivos_possiveis[:n_registros])
+        # print(arquivos_possiveis[:n_registros])
         
         return paginas
 
@@ -158,16 +158,13 @@ class Ordenador:
             # roda o loop até que os primeiro arquivo de filled esteja vazio (terminou a intercalação da fase)
             while not filled[0].isEmpty():
                 for x in notFilled:
-                    if (self.isOrdered()):
+                    if (self.isOrdered() or filled[0].isEmpty()):
                         break
                     writes += self.intercalar(filled, x)
                     [x.active() for x in filled if x.isBlocked()]
             
             count+=1
 
-            
-
-        
         filled = [x for x in self.paginas if (not x.isEmpty())]
         self.imprimir_resultados(filled, count, m, to_print)
         self.paginaFinal = filled
@@ -181,11 +178,10 @@ class Ordenador:
         heap = Heap()
         for x in filled:
             if(not x.isEmpty()):  #se a pagina está vazia eu simplesmente skipo ela
-                # print(x)
                 heap.push(x.pop())
         
         new_sequence = deque()  #new_sequence representa a nova sequência que será gerada
-
+        
         #intercalação propriamente dita utilizando heap mim
         while(len(heap) > 0):
             item = heap.pop()
@@ -193,7 +189,7 @@ class Ordenador:
                 heap.push(self.paginas[item.index].pop())
             new_sequence.append(item)
             nWrites += 1
-    
+
         target.add(new_sequence, target.index)
         return nWrites
 
@@ -333,6 +329,13 @@ class Ordenador:
                 return True
         
         return False
+    
+    def isAllPagesEmpty(self, pages: deque[Pagina]):
+        for page in pages:
+            if (not page.isEmpty()):
+                return False
+            
+        return True
 
 
 
