@@ -147,13 +147,16 @@ class Ordenador:
                 self.imprimir_resultados(filled, count, m, to_print
                 )
 
-            for x in notFilled:
-                if (self.isOrdered()):
-                    break
-                writes += self.intercalar(filled, x)
-                [x.active() for x in filled if x.isBlocked()]
+            while not filled[0].isEmpty():
+                for x in notFilled:
+                    if (self.isOrdered()):
+                        break
+                    writes += self.intercalar(filled, x)
+                    [x.active() for x in filled if x.isBlocked()]
             
             count+=1
+
+            
 
         
         filled = [x for x in self.paginas if (not x.isEmpty())]
