@@ -63,6 +63,8 @@ class GeradorExperimentos:
     def saveToJson(self, dct:dict, title:str):
         json.dump(dct, open(title, "w"))
 
+    
+
 
     
 

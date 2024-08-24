@@ -94,16 +94,17 @@ class Ordenador:
         
         return paginas
 
-    
+
     def gerarSequencais(self, registros:list[int],
                          m:int, r:int,
                            limitePaginas:int) -> None:
         heap = Heap()
         sequence:deque[Registro] = deque()
+        sequencias = []
         pageCounter = 0
         sequenceCounter = 0
-
         count = 0
+
         for elem in registros:
             new_registro = Registro(elem)
 
@@ -123,26 +124,39 @@ class Ordenador:
                 heap.push(new_registro)
 
             if (not heap.isEmpty() and heap.first().flag == 1):
-                self.paginas[pageCounter].add(sequence, pageCounter)
+                sequencias.append(sequence)
                 self.nRegistros += len(sequence)
                 sequenceCounter+=1
 
                 if(sequenceCounter == r): 
-                    return
-                pageCounter+=1
-
-                if (pageCounter == limitePaginas): 
-                    pageCounter = 0
+                    break;
 
                 sequence = deque()
             
             count+=1
-        
+
         while(not heap.isEmpty()):
             sequence.append(heap.pop())
         
         self.nRegistros += len(sequence)
-        self.paginas[pageCounter].add(sequence, pageCounter)
+        
+        nPaginas = 0
+        for elem in sequencias:
+            self.paginas[nPaginas].add(elem, nPaginas)
+            nPaginas+=1
+            if(nPaginas == limitePaginas):
+                nPaginas=0
+
+       
+
+        if(len(sequencias) % limitePaginas == 0):
+            sequence = self.paginas[limitePaginas-1].popSequence()
+            self.paginas[0].add(sequence, 0)
+
+
+
+
+
 
     def balanceadaMultiCaminhos(self, m:int, to_print:bool=True) -> None:
         count = 0
@@ -151,9 +165,7 @@ class Ordenador:
             filled = [x for x in self.paginas if (not x.isEmpty())]
             notFilled = [x for x in self.paginas if (x.isEmpty())]
 
-            if to_print:
-                self.imprimir_resultados(filled, count, m, to_print
-                )
+            self.imprimir_resultados(filled, count, m, to_print)
 
             # roda o loop até que os primeiro arquivo de filled esteja vazio (terminou a intercalação da fase)
             while not filled[0].isEmpty():

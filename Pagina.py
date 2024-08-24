@@ -30,6 +30,9 @@ class Pagina:
         if (len(self.registros[0]) < 1): self.blocked = True
         return item
     
+    def popSequence(self):
+        return self.registros.popleft()
+    
     def active(self):
         self.registros.popleft()
         self.blocked = False
