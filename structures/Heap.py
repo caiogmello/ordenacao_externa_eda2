@@ -1,5 +1,5 @@
 from heapq import *
-from Registro import Registro
+from structures.Registro import Registro
 
 class Heap:
     def __init__(self):

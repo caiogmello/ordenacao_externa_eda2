@@ -1,5 +1,5 @@
 from collections import deque
-from Registro import Registro
+from structures.Registro import Registro
 
 class Pagina:
     def __init__(self, index):

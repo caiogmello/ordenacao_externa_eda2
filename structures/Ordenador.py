@@ -1,7 +1,7 @@
 from collections import deque
-from Pagina import Pagina
-from Heap import Heap
-from Registro import Registro
+from structures.Pagina import Pagina
+from structures.Heap import Heap
+from structures.Registro import Registro
 import numpy as np
 
 class Ordenador:

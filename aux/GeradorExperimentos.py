@@ -1,4 +1,4 @@
-from Ordenador import Ordenador
+from structures.Ordenador import Ordenador
 from tqdm import tqdm
 import numpy as np
 

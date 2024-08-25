@@ -14,7 +14,9 @@ class Plotter:
         plt.ylabel("Alpha(r)")
         if ylim is not None:
             plt.ylim(0,ylim)
+        plt.savefig(f'./imgs/{title}')
         plt.show()
+
 
     @staticmethod
     def plotBeta(df, title, ylim1=None, ylim2 = None):
@@ -26,6 +28,7 @@ class Plotter:
         if ylim1 is not None:
             plt.ylim(ylim1, ylim2)
         plt.ylabel("Beta(m,0)")
+        plt.savefig(f'./imgs/{title}')
         plt.show()
 
     @staticmethod
@@ -53,4 +56,5 @@ class Plotter:
 
         plt.suptitle(title, fontsize=18)
         plt.tight_layout()
+        plt.savefig(f'./imgs/{title}')
         plt.show()

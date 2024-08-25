@@ -1,15 +1,31 @@
-from FileManager import fileManager
-from Ordenador import Ordenador
+from aux.FileManager import fileManager
+from structures.Ordenador import Ordenador
 import sys
-from GeradorExperimentos import GeradorExperimentos
+from aux.GeradorExperimentos import GeradorExperimentos
 
+
+''''
+    Note:
+
+    Main.py
+    Main file to run the project
+    Usage:
+        python3 Main.py [file]
+    Example:
+        python3 Main.py examples/hard_example
+
+    to Output the results to a file, use the following command:
+        python3 Main.py examples/hard_example > output.txt
+
+'''
 
 if __name__ == "__main__":
     g = GeradorExperimentos(3, 8, 200000)
+
     if(len(sys.argv) > 1):
-        mode, specs, values = fileManager.read(sys.argv[1])
+        mode, specs, values = fileManager.read(f'{sys.argv[1]}')
     else:
-        mode, specs, values = fileManager.read('examples/hard_example')
+        mode, specs, values = fileManager.read('examples/example_cascata')
 
     ordenador = Ordenador()
     
