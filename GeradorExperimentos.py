@@ -39,7 +39,7 @@ class GeradorExperimentos:
                     for l in range(numero_de_iteracoes):
                         ordenador = Ordenador()
                         ordenador.ordenar(mode, self.const_m, j, i, n, None, True, False)
-                        alpha_total += ordenador.alpha
+                        alpha_total += ordenador.alpha_r
 
                     dct[i][j] = round(alpha_total/numero_de_iteracoes,4)
 
