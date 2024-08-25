@@ -1,7 +1,7 @@
-from aux.FileManager import fileManager
+from helper.FileManager import fileManager
 from structures.Ordenador import Ordenador
 import sys
-from aux.GeradorExperimentos import GeradorExperimentos
+from helper.GeradorExperimentos import GeradorExperimentos
 
 
 ''''
