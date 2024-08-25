@@ -19,7 +19,7 @@ class Ordenador:
         
         self.restart()
         self.paginas = self.criarPaginas(k)
-    
+
         limite_de_paginas: int = self.setLimiteDePaginas(k, method)
         
         if not experimental:
@@ -268,7 +268,7 @@ class Ordenador:
 
             self.computarResultados(filled, count, m, to_print)
 
-            maiorPagina: Pagina = max(self.paginas, key=lambda x: len(x))
+            maiorPagina: Pagina = self.getBiggestPage()
 
             # até que a maior pagina seja esvaziada, tem que continuar intercalando
             while(not maiorPagina.isEmpty()):
@@ -289,6 +289,10 @@ class Ordenador:
         if to_print:
             print("Final", f"{self.alpha_r:.2f}")
 
+
+    def getBiggestPage(self):
+        return max(self.paginas, key=lambda x: len(x))
+    
     def getSmallestPage(self, filled:deque[Pagina]):
         smallest = filled[0]
         for i in range(1, len(filled)):
