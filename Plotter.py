@@ -25,7 +25,7 @@ def plotBeta(df, title, ylim1=None, ylim2 = None):
     plt.ylabel("Beta(m,0)")
     plt.show()
 
-def subplotAlphaBeta(alpha, beta, title, beta_ylim=None, alpha_ylim=None):
+def subplotAlphaBeta(alpha, beta, title, alpha_ylim0=None, alpha_ylim1=None, beta_ylim0=None, beta_ylim1=None):
     fig, axs = plt.subplots(1,2, figsize=(18,7))
     for c in alpha.columns:
         axs[0].plot(alpha[c], label=f"k = {c}")
@@ -35,16 +35,16 @@ def subplotAlphaBeta(alpha, beta, title, beta_ylim=None, alpha_ylim=None):
     axs[0].set_xlabel("r")
     axs[0].grid()
     axs[0].set_ylabel("Alpha(r)")
-    if alpha_ylim is not None:
-        axs[0].set_ylim(0, alpha_ylim)
+    if alpha_ylim0 is not None:
+        axs[0].set_ylim(alpha_ylim0, alpha_ylim1)
 
-    axs[1].bar(beta.index, height=beta.values, color = 'tab:orange')
     axs[1].plot(beta.index, beta.values, label=f"m", marker='^', linestyle='--')
     axs[1].set_title('Beta(m, 0) vs m')
     axs[1].set_xlabel("m")
     axs[1].grid()
-    if beta_ylim is not None:
-        axs[1].set_ylim(0, beta_ylim)
+
+    if beta_ylim0 is not None:
+        axs[1].set_ylim(beta_ylim0, beta_ylim1)
     axs[1].set_ylabel("Beta(m,0)")
 
     plt.suptitle(title, fontsize=16)
