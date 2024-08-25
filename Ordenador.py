@@ -25,7 +25,7 @@ class Ordenador:
         if not experimental:
             self.gerarSequencias(registros, m, r, limite_de_paginas)
         else:
-            self.paginas = self.gerarRSequenciasAleatorias(n, r, k, method)
+            self.paginas = self.gerarSequenciasAleatorias(n, r, k, method)
         
         match method:
             case "B":
@@ -53,7 +53,7 @@ class Ordenador:
 
         return paginas
     
-    def gerarRSequenciasAleatorias(self, n, r, k, metodo):
+    def gerarSequenciasAleatorias(self, n, r, k, metodo):
                 
         limite_de_paginas: int = self.setLimiteDePaginas(k, metodo)
             
