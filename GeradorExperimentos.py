@@ -17,8 +17,6 @@ class GeradorExperimentos:
         self.const_k = k
         self.const_m = m
         self.const_r = r
-
-        self.ordenador = Ordenador()
     
     def initR(self):
         possibles = [i*j for i in range(1,11) for j in range(10,1001,10) if i*j <= 5000]
@@ -39,8 +37,9 @@ class GeradorExperimentos:
                     if j not in dct[i]:
                         dct[i][j] = {}
                     for l in range(numero_de_iteracoes):
-                        self.ordenador.ordenar(mode, self.const_m, j, i, n, None, True, False)
-                        alpha_total += self.ordenador.alpha
+                        ordenador = Ordenador()
+                        ordenador.ordenar(mode, self.const_m, j, i, n, None, True, False)
+                        alpha_total += ordenador.alpha
 
                     dct[i][j] = round(alpha_total/numero_de_iteracoes,4)
 
@@ -51,12 +50,14 @@ class GeradorExperimentos:
         dct = {}
         with tqdm(total=len(self.m)) as pbar:
             for j in self.m:
+                pbar.update(1)
                 beta0_total = 0
                 if j not in dct:
                     dct[j] = {}
                 for l in range(numero_de_iteracoes):
-                    self.ordenador.ordenar(mode, j, self.const_k,self.const_r, n, np.random.permutation(n), False, False)
-                    beta0_total += self.ordenador.betas[0]
+                    ordenador = Ordenador()
+                    ordenador.ordenar(mode, j, self.const_k,self.const_r, n, np.random.permutation(n), False, False)
+                    beta0_total += ordenador.betas[0]
 
                 dct[j] = round(beta0_total/numero_de_iteracoes,4)
 

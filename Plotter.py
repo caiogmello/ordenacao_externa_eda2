@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 def plotAlpha(df, title, ylim=None):
     fig = plt.figure(figsize=(15,8))

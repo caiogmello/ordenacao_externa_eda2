@@ -26,6 +26,8 @@ class Pagina:
         return -1
 
     def pop(self):
+        if(len(self.registros) < 1):
+            print(self.registros)
         item = self.registros[0].popleft()
         if (len(self.registros[0]) < 1): self.blocked = True
         return item
@@ -34,7 +36,9 @@ class Pagina:
         return self.registros.popleft()
     
     def active(self):
+        
         self.registros.popleft()
+        
         self.blocked = False
     
     def isBlocked(self):

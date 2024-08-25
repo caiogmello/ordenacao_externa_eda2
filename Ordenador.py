@@ -139,6 +139,9 @@ class Ordenador:
             sequence.append(heap.pop())
         
         self.nRegistros += len(sequence)
+
+        if(sequencias.count(sequence)==0):
+            sequencias.append(sequence)
         
         nPaginas = 0
         for elem in sequencias:
@@ -147,15 +150,9 @@ class Ordenador:
             if(nPaginas == limitePaginas):
                 nPaginas=0
 
-       
-
         if(len(sequencias) % limitePaginas == 0):
             sequence = self.paginas[limitePaginas-1].popSequence()
             self.paginas[0].add(sequence, 0)
-
-
-
-
 
 
     def balanceadaMultiCaminhos(self, m:int, to_print:bool=True) -> None:
