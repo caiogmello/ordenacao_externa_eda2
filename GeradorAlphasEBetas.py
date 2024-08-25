@@ -1,9 +1,5 @@
-from FileManager import fileManager
-from Registro import Registro
-from Ordenador import Ordenador
-import sys
 from GeradorExperimentos import GeradorExperimentos
-from JsonManager import saveJson
+from JsonManager import JsonManager
 
 g = GeradorExperimentos(3, 8, 200000)
 

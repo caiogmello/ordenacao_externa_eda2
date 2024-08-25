@@ -1,9 +1,7 @@
 from FileManager import fileManager
-from Registro import Registro
 from Ordenador import Ordenador
 import sys
 from GeradorExperimentos import GeradorExperimentos
-from JsonManager import saveJson
 
 
 if __name__ == "__main__":
