@@ -5,6 +5,7 @@ from Ordenador import Ordenador
 import sys
 from tqdm import tqdm
 import json
+import numpy as np
 
 class GeradorExperimentos:
     def __init__(self, m:int=3, k:int=8, r:int=20):
@@ -48,21 +49,19 @@ class GeradorExperimentos:
 
     def getBetaDict(self, n:int, mode:str, numero_de_iteracoes:int=10):
         dct = {}
-        for j in self.m:
-            beta0_total = 0
-            if j not in dct:
-                dct[j] = {}
-            for l in range(numero_de_iteracoes):
-                self.ordenador.ordenar(mode, j, self.const_k,self.const_r, n, None, True, False)
-                beta0_total += self.ordenador.betas[0]
+        with tqdm(total=len(self.m)) as pbar:
+            for j in self.m:
+                beta0_total = 0
+                if j not in dct:
+                    dct[j] = {}
+                for l in range(numero_de_iteracoes):
+                    self.ordenador.ordenar(mode, j, self.const_k,self.const_r, n, np.random.permutation(n), False, False)
+                    beta0_total += self.ordenador.betas[0]
 
-            dct[j] = round(beta0_total/numero_de_iteracoes,4)
+                dct[j] = round(beta0_total/numero_de_iteracoes,4)
 
         return dct
     
-    def saveToJson(self, dct:dict, title:str):
-        json.dump(dct, open(title, "w"))
-
     
 
 
