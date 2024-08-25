@@ -1,5 +1,5 @@
-from aux.GeradorExperimentos import GeradorExperimentos
-from aux.JsonManager import JsonManager
+from helper.GeradorExperimentos import GeradorExperimentos
+from helper.JsonManager import JsonManager
 
 
 '''
