@@ -25,7 +25,7 @@ if __name__ == "__main__":
     if(len(sys.argv) > 1):
         mode, specs, values = fileManager.read(f'{sys.argv[1]}')
     else:
-        mode, specs, values = fileManager.read('examples/example_cascata')
+        mode, specs, values = fileManager.read('examples/cascata')
 
     ordenador = Ordenador()
     
