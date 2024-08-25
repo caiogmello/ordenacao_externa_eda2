@@ -9,19 +9,19 @@ import numpy as np
 
 class GeradorExperimentos:
     def __init__(self, m:int=3, k:int=8, r:int=20):
-        self.possibles_r = None
-        self.initR()
         self.m = [3,15,30,45,60]
         self.k = [4,6,8,10,12]
+        self.possibles_r: list[int] = self.initR()
 
-        self.const_k = k
-        self.const_m = m
-        self.const_r = r
+        self.const_k: int = k
+        self.const_m: int = m
+        self.const_r: int = r
     
     def initR(self):
         possibles = [i*j for i in range(1,11) for j in range(10,1001,10) if i*j <= 5000]
         sett = set(possibles)
-        self.possibles_r = sorted(list(sett))
+
+        return sorted(list(sett))
 
     
     def getAlphaDict(self, n:int, mode:str, numero_de_iteracoes:int=10):
@@ -56,7 +56,7 @@ class GeradorExperimentos:
                     dct[j] = {}
                 for l in range(numero_de_iteracoes):
                     ordenador = Ordenador()
-                    ordenador.ordenar(mode, j, self.const_k,self.const_r, n, np.random.permutation(n), False, False)
+                    ordenador.ordenar(mode, j, self.const_k,self.const_r, n, list(np.random.permutation(n)), False, False)
                     beta0_total += ordenador.betas[0]
 
                 dct[j] = round(beta0_total/numero_de_iteracoes,4)

@@ -19,7 +19,7 @@ class Ordenador:
         
         self.restart()
         self.paginas = self.criarPaginas(k)
-
+    
         limite_de_paginas: int = self.setLimiteDePaginas(k, method)
         
         if not experimental:
